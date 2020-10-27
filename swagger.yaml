@@ -150,7 +150,7 @@ paths:
       tags:
         - channels
       summary: Join a channel.
-      description: This endpoint is used to join a channel.
+      description: This endpoint is used to join a channel. If the user id is not given in the request body, it will be taken from the token.
       requestBody:
         required: true
         content:
@@ -165,7 +165,7 @@ paths:
                 user_id:
                   type: string
                   format: uuid
-                  description: id of the user who is joining the channel. If not given, id will be taken from the token.
+                  description: id of the user who is joining the channel.
               required:
                 - channel_id
       responses:
