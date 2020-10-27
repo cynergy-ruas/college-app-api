@@ -112,11 +112,11 @@ paths:
                   enum: [add, remove]
       responses:
         200:
-          description: Returns the info of the required channel.
+          description: Update successful.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/channel'
+                $ref: '#/components/x-hidden-schemas/message'
         404:
           description: Channel not found.
         401:
