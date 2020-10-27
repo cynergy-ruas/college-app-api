@@ -204,7 +204,7 @@ paths:
                 user_id:
                   type: string
                   format: uuid
-                  description: id of the user who is leaving the channel. If not given, id will be taken from the token.
+                  description: id of the user who is leaving the channel.
               required:
                 - channel_id
       responses:
