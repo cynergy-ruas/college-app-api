@@ -1,4 +1,3 @@
----
 openapi: 3.0.0
 info:
   description: API schema for Real-Name-TBD College App
@@ -8,6 +7,12 @@ info:
 tags:
   - name: channels
     description: Everything about your channel.
+    
+  - name: auth
+    description: Auth related operations.
+    
+  - name: user
+    description: User related operations.
 
 paths:
   /channels/all:
@@ -73,6 +78,49 @@ paths:
           description: Channel not found.
         401:
           $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags: 
+        - channels
+      summary: Update info of a channel.
+      description: This endpoint is used to update the information of the given channel. You need to only specify the fields that are to be updated.<br/>In case the admins are to be added or removed, specify the `admin` and the `admin_action` (`add` to add the admin, or `remove` to remove the given admin). 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  description: name of the channel.
+                  type: string
+                  example: some channel
+                type:
+                  description: type of the channel. Can be one of "private" or "public".
+                  type: string
+                  enum: [private, public]
+                dp:
+                  description: channel display pic (the actual image).
+                  type: string
+                  format: binary
+                admin:
+                  description: the user id of the admin to add or remove.
+                  type: string
+                  format: uuid
+                admin_action:
+                  description: whether to add or remove the given admin. can be one of "add" or "remove"
+                  type: string
+                  enum: [add, remove]
+      responses:
+        200:
+          description: Returns the info of the required channel.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/channel'
+        404:
+          description: Channel not found.
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
   
   /channels/create:
     post:
@@ -93,7 +141,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/message'
+                $ref: '#/components/x-hidden-schemas/message'
         401:
           $ref: '#/components/responses/UnauthorizedError'
           
@@ -126,7 +174,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/message'
+                $ref: '#/components/x-hidden-schemas/message'
         401:
           $ref: '#/components/responses/UnauthorizedError'
         404:
@@ -134,7 +182,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/message'
+                $ref: '#/components/x-hidden-schemas/message'
 
   /channels/leave:
     post:
@@ -165,7 +213,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/message'
+                $ref: '#/components/x-hidden-schemas/message'
         401:
           $ref: '#/components/responses/UnauthorizedError'
         404:
@@ -173,8 +221,175 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/message'
-
+                $ref: '#/components/x-hidden-schemas/message'
+                
+  /channels/delete:
+    delete:
+      tags:
+        - channels
+      summary: Delete a channel.
+      description: This endpoint is used to delete a channel.
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+            description: id of the channel to delete.
+      responses:
+        200:
+          description: Request was successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/x-hidden-schemas/message'
+                
+        404:
+          description: Channel not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/x-hidden-schemas/message'
+        
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+    
+  /auth/register:
+    post:
+      tags:
+        - auth
+      summary: Registeration.
+      description: This endpoint is used to register a new user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reg_no:
+                  type: string
+                  description: roll number of the user.
+                password:
+                  type: string
+                  description: The password of the user.
+              required:
+                - reg_no
+                - password
+      responses:
+        200:
+          description: User registration successful. Token is returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: The auth token.
+  
+  /auth/login:
+    post:
+      tags:
+        - auth
+      summary: Login.
+      description: This endpoint is used to log a user in.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reg_no:
+                  type: string
+                  description: roll number of the user.
+                password:
+                  type: string
+                  description: The password of the user.
+              required:
+                - reg_no
+                - password
+      responses:
+        200:
+          description: Login successful. Token is returned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: The auth token.
+  
+  /user:
+    get:
+      tags:
+        - user
+      summary: Get user info.
+      description: This endpoint is used to get user information.
+      responses:
+        200:
+          description: Request successful, user info is returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - user
+      summary: Update user info.
+      description: This endpoint is used to update (or create) user information.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                reg_no:
+                  type: string
+                  description: university registration number.
+                  example: '18ETCS021245'
+                name:
+                  type: string
+                  description: name of the user.
+                  example: John Doe
+                department:
+                  type: string
+                  description: department the user is in.
+                  example: Computer Science
+                semester:
+                  type: integer
+                  description: semester the user is in.
+                  example: 5
+                section:
+                  type: string
+                  description: section the user is in.
+                  example: C
+                email:
+                  type: string
+                  description: email id of the user.
+                  example: something@example.com
+                  
+      responses:
+        200:
+          description: Request is successful.
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/x-hidden-schemas/message'
+        404:
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/x-hidden-schemas/message'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+  
 components:
   schemas:
     channel:
@@ -186,16 +401,21 @@ components:
         name:
           description: name of the channel.
           type: string
+          example: some channel
         members:
           description: list of users in the channel.
           type: array
           items:
             type: string
             format: uuid
+          example:
+            - '3fa85f64-5717-4562-b3fc-2c963f66afa6'
+            - '54bg5f64-5717-4562-b3fc-2c76hjdfu9a6'
         type:
           description: type of the channel. Can be one of "private" or "public".
           type: string
           enum: [private, public]
+          example: public
         dp:
           description: channel display pic (the actual image).
           type: string
@@ -206,6 +426,43 @@ components:
           items:
             type: string
             format: uuid
+          example:
+            - '3fa85f64-5717-4562-b3fc-2c963f66afa6'
+            - '54bg5f64-5717-4562-b3fc-2c76hjdfu9a6'
+
+    user:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: id of the user
+        reg_no:
+          type: string
+          description: university registration number.
+          example: '18ETCS021245'
+        name:
+          type: string
+          description: name of the user.
+          example: John Doe
+        department:
+          type: string
+          description: department the user is in.
+          example: Computer Science
+        semester:
+          type: integer
+          description: semester the user is in.
+          example: 5
+        section:
+          type: string
+          description: section the user is in.
+          example: C
+        email:
+          type: string
+          description: email id of the user.
+          example: something@example.com
+  
+  x-hidden-schemas:
     message:
       type: object
       properties:
@@ -216,11 +473,12 @@ components:
       required:
         - code
         - message
-  
+
   responses:
     UnauthorizedError:
       description: Access token is missing, invalid or user is not authorized to make the request.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/message'
+            $ref: '#/components/x-hidden-schemas/message'
+            
