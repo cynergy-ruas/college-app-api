@@ -150,7 +150,7 @@ paths:
       tags:
         - channels
       summary: Join a channel.
-      description: This endpoint is used to join a channel. If the user id is not given in the request body, it will be taken from the token.
+      description: This endpoint is used to join a channel. If the `user_id` is not given in the request body, it will be taken from the token.
       requestBody:
         required: true
         content:
@@ -189,7 +189,7 @@ paths:
       tags:
         - channels
       summary: Leave a channel.
-      description: This endpoint is used to leave a channel.
+      description: This endpoint is used to leave a channel. If the `user_id` is not given in the request body, it will be taken from the token.
       requestBody:
         required: true
         content:
