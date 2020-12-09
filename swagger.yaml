@@ -127,13 +127,39 @@ paths:
       tags:
         - channels
       summary: Creates a new channel.
-      description: This endpoint is used to create a new channel.
+      description: This endpoint is used to create a new channel. The `members` field and the `admins` field will **only** have the user id of the user who is trying to create a channel.
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/channel'
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: name of the channel
+                  example: some channel
+                members:
+                  type: array
+                  description: members of the channel
+                  items:
+                    type: string
+                  example:
+                    - '3fa85f64-5717-4562-b3fc-2c963f66afa6'
+                type:
+                  enum: [private, public]
+                  type: string
+                  example: public
+                dp:
+                  type: string
+                  format: binary
+                admins:
+                  type: array
+                  description: admins of the channel
+                  items:
+                    type: string
+                  example:
+                    - '3fa85f64-5717-4562-b3fc-2c963f66afa6'
               
       responses:
         200:
@@ -481,4 +507,3 @@ components:
         application/json:
           schema:
             $ref: '#/components/x-hidden-schemas/message'
-            
