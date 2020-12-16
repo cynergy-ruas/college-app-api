@@ -13,6 +13,9 @@ tags:
     
   - name: user
     description: User related operations.
+    
+  - name: message
+    description: API endpoints related to messages.
 
 paths:
   /channels/all:
@@ -416,6 +419,61 @@ paths:
         401:
           $ref: '#/components/responses/UnauthorizedError'
   
+  /message/get:
+    get:
+      tags:
+        - message
+      summary: Get messages of a channel in the given time frame.
+      description: This endpoint is used to get the messages of a channel that were sent after `start` time and before `end` time. The format for `start` and `end` should follow [RFC 3339, section 5.6](https://tools.ietf.org/html/rfc3339#section-5.6).
+      parameters:
+        - in: query
+          name: channel
+          schema:
+            type: string
+            description: name of the channel whose messages are required.
+            example: some channel
+          required: true
+          
+        - in: query
+          name: start
+          schema:
+            type: string
+            format: date-time
+            description: time after which the messages should be obtained.
+            example: "2020-12-16T13:31:18.286Z"
+          required: true
+          
+        - in: query
+          name: end
+          schema:
+            type: string
+            format: date-time
+            description: time after which the messages should be obtained.
+            example: "2020-12-16T13:31:18.286Z"
+          required: true
+      
+      responses:
+        200:
+          description: Successfully retrieved messages between given `start` and `end` times. An empty array is returned if no messages are found in the channel between the given times.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/message'
+        
+        404:
+          description: Returned when the channel is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/x-hidden-schemas/message'
+                
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+      
+    
+  
 components:
   schemas:
     channel:
@@ -455,6 +513,25 @@ components:
           example:
             - '3fa85f64-5717-4562-b3fc-2c963f66afa6'
             - '54bg5f64-5717-4562-b3fc-2c76hjdfu9a6'
+            
+    message:
+      properties:
+        channel:
+          type: string
+          description: name of the channel whose messages are required.
+          example: some channel
+        content:
+          type: string
+          description: The message contents.
+          example: "blah blah blah blah...blah."
+        start:
+          type: string
+          format: date-time
+          description: time after which the messages should be obtained.
+        end:
+          type: string
+          format: date-time
+          description: time before which the messsages should be obtained.
 
     user:
       type: object
@@ -494,8 +571,12 @@ components:
       properties:
         code:
           type: string
+          description: the HTTP error code
+          example: 404
         message:
           type: string
+          description: the error message.
+          example: This is some human readable error message.
       required:
         - code
         - message
