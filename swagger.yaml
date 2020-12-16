@@ -119,7 +119,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/x-hidden-schemas/message'
+                $ref: '#/components/x-hidden-schemas/response_message'
         404:
           description: Channel not found.
         401:
@@ -170,7 +170,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/x-hidden-schemas/message'
+                $ref: '#/components/x-hidden-schemas/response_message'
         401:
           $ref: '#/components/responses/UnauthorizedError'
           
@@ -203,7 +203,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/x-hidden-schemas/message'
+                $ref: '#/components/x-hidden-schemas/response_message'
         401:
           $ref: '#/components/responses/UnauthorizedError'
         404:
@@ -211,7 +211,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/x-hidden-schemas/message'
+                $ref: '#/components/x-hidden-schemas/response_message'
 
   /channels/leave:
     post:
@@ -242,7 +242,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/x-hidden-schemas/message'
+                $ref: '#/components/x-hidden-schemas/response_message'
         401:
           $ref: '#/components/responses/UnauthorizedError'
         404:
@@ -250,7 +250,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/x-hidden-schemas/message'
+                $ref: '#/components/x-hidden-schemas/response_message'
                 
   /channels/delete:
     delete:
@@ -272,14 +272,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/x-hidden-schemas/message'
+                $ref: '#/components/x-hidden-schemas/response_message'
                 
         404:
           description: Channel not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/x-hidden-schemas/message'
+                $ref: '#/components/x-hidden-schemas/response_message'
         
         401:
           $ref: '#/components/responses/UnauthorizedError'
@@ -409,13 +409,13 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/x-hidden-schemas/message'
+                $ref: '#/components/x-hidden-schemas/response_message'
         404:
           description: User not found.
           content:
             application/json:
               schema:
-                $ref: '#/components/x-hidden-schemas/message'
+                $ref: '#/components/x-hidden-schemas/response_message'
         401:
           $ref: '#/components/responses/UnauthorizedError'
   
@@ -454,7 +454,7 @@ paths:
       
       responses:
         200:
-          description: An array of messages between given `start` and `end` times from the given channel. An empty array is returned if no messages are found in the channel between the given times.
+          description: Successfully retrieved messages between given `start` and `end` times. An empty array is returned if no messages are found in the channel between the given times.
           content:
             application/json:
               schema:
@@ -467,7 +467,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/x-hidden-schemas/message'
+                $ref: '#/components/x-hidden-schemas/response_message'
                 
         401:
           $ref: '#/components/responses/UnauthorizedError'
@@ -524,14 +524,14 @@ components:
           type: string
           description: The message contents.
           example: "blah blah blah blah...blah."
-        start:
+        sender:
+          type: string
+          description: The user id who sent the message.
+          example: '3fa85f64-5717-4562-b3fc-2c963f66afa6'
+        timestamp:
           type: string
           format: date-time
-          description: time after which the messages should be obtained.
-        end:
-          type: string
-          format: date-time
-          description: time before which the messsages should be obtained.
+          description: time at which the message was sent.
 
     user:
       type: object
@@ -566,7 +566,7 @@ components:
           example: something@example.com
   
   x-hidden-schemas:
-    message:
+    response_message:
       type: object
       properties:
         code:
@@ -587,4 +587,4 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/x-hidden-schemas/message'
+            $ref: '#/components/x-hidden-schemas/response_message'
