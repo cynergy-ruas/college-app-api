@@ -454,7 +454,7 @@ paths:
       
       responses:
         200:
-          description: Successfully retrieved messages between given `start` and `end` times. An empty array is returned if no messages are found in the channel between the given times.
+          description: An array of messages between given `start` and `end` times from the given channel. An empty array is returned if no messages are found in the channel between the given times.
           content:
             application/json:
               schema:
