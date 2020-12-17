@@ -357,7 +357,7 @@ paths:
       tags:
         - user
       summary: Get user info.
-      description: This endpoint is used to get user information.
+      description: This endpoint is used to get information of a given user. The user id can be obtained from the `App-User-Id` request header field.
       responses:
         200:
           description: Request successful, user info is returned.
