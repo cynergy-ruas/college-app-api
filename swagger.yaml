@@ -367,11 +367,13 @@ paths:
                 $ref: '#/components/schemas/user'
         401:
           $ref: '#/components/responses/UnauthorizedError'
+  
+  /user/update:
     post:
       tags:
         - user
       summary: Update user info.
-      description: This endpoint is used to update (or create) user information.
+      description: This endpoint is used to update user information. Only the information that needs to be changed can be sent.
       requestBody:
         required: true
         content:
@@ -418,13 +420,67 @@ paths:
                 $ref: '#/components/x-hidden-schemas/response_message'
         401:
           $ref: '#/components/responses/UnauthorizedError'
+          
+  /user/create:
+    post:
+      tags:
+        - user
+      summary: Update user info.
+      description: This endpoint is used to create a user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                reg_no:
+                  type: string
+                  description: university registration number.
+                  example: '18ETCS021245'
+                name:
+                  type: string
+                  description: name of the user.
+                  example: John Doe
+                department:
+                  type: string
+                  description: department the user is in.
+                  example: Computer Science
+                semester:
+                  type: integer
+                  description: semester the user is in.
+                  example: 5
+                section:
+                  type: string
+                  description: section the user is in.
+                  example: C
+                email:
+                  type: string
+                  description: email id of the user.
+                  example: something@example.com
+              required:
+                - reg_no
+                - name
+                - department
+                - semester
+                - section
+                - email
+                  
+      responses:
+        200:
+          description: Request is successful.
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/x-hidden-schemas/response_message'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
   
   /message/get:
     get:
       tags:
         - message
       summary: Get messages of a channel in the given time frame.
-      description: This endpoint is used to get the messages of a channel that were sent after `start` time and before `end` time. The format for `start` and `end` should follow [RFC 3339, section 5.6](https://tools.ietf.org/html/rfc3339#section-5.6).
+      description: This endpoint is used to get the messages of a channel that were sent after `start` time and before `end` time. The format for `start` and `end` should follow [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.
       parameters:
         - in: query
           name: channel
