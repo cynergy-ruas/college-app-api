@@ -5,7 +5,7 @@ info:
   title: Real-Name-TBD College App
 
 tags:
-  - name: channels
+  - name: channel
     description: Everything about your channel.
     
   - name: auth
@@ -18,10 +18,10 @@ tags:
     description: API endpoints related to messages.
 
 paths:
-  /channels/all:
+  /channel/all:
     get:
       tags: 
-        - channels
+        - channel
       summary: Get all public channels
       description: This endpoint is used to information regarding all public channels.
       responses:
@@ -36,10 +36,10 @@ paths:
         401:
           $ref: '#/components/responses/UnauthorizedError'
           
-  /channels/user:
+  /channel/user:
     get:
       tags:
-        - channels
+        - channel
       summary: Get channels a user is subscribed to.
       description: This endpoint gets all the channels a user is subscribed to.
       responses:
@@ -54,10 +54,10 @@ paths:
         401:
           $ref: '#/components/responses/UnauthorizedError'
         
-  /channels/info:
+  /channel/info:
     get:
       tags: 
-        - channels
+        - channel
       summary: Get info of a channel.
       description: This endpoint gets the information of the given channel.
       parameters: 
@@ -83,7 +83,7 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
     post:
       tags: 
-        - channels
+        - channel
       summary: Update info of a channel.
       description: This endpoint is used to update the information of the given channel. You need to only specify the fields that are to be updated.<br/>In case the admins are to be added or removed, specify the `admin` and the `admin_action` (`add` to add the admin, or `remove` to remove the given admin). 
       requestBody:
@@ -125,10 +125,10 @@ paths:
         401:
           $ref: '#/components/responses/UnauthorizedError'
   
-  /channels/create:
+  /channel/create:
     post:
       tags:
-        - channels
+        - channel
       summary: Creates a new channel.
       description: This endpoint is used to create a new channel. The `members` field and the `admins` field will **only** have the user id of the user who is trying to create a channel.
       requestBody:
@@ -174,10 +174,10 @@ paths:
         401:
           $ref: '#/components/responses/UnauthorizedError'
           
-  /channels/join:
+  /channel/join:
     post:
       tags:
-        - channels
+        - channel
       summary: Join a channel.
       description: This endpoint is used to join a channel. If the `user_id` is not given in the request body, it will be taken from the token.
       requestBody:
@@ -213,10 +213,10 @@ paths:
               schema:
                 $ref: '#/components/x-hidden-schemas/response_message'
 
-  /channels/leave:
+  /channel/leave:
     post:
       tags:
-        - channels
+        - channel
       summary: Leave a channel.
       description: This endpoint is used to leave a channel. If the `user_id` is not given in the request body, it will be taken from the token.
       requestBody:
@@ -252,10 +252,10 @@ paths:
               schema:
                 $ref: '#/components/x-hidden-schemas/response_message'
                 
-  /channels/delete:
+  /channel/delete:
     delete:
       tags:
-        - channels
+        - channel
       summary: Delete a channel.
       description: This endpoint is used to delete a channel.
       parameters:
