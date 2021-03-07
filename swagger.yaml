@@ -542,6 +542,10 @@ components:
           description: name of the channel.
           type: string
           example: some channel
+        description:
+          description: description of the channel
+          type: string
+          example: some long description
         members:
           description: list of users in the channel.
           type: array
@@ -569,6 +573,10 @@ components:
           example:
             - '3fa85f64-5717-4562-b3fc-2c963f66afa6'
             - '54bg5f64-5717-4562-b3fc-2c76hjdfu9a6'
+        owner:
+          description: the user id of the owner of the channel
+          type: string
+          example: '3fa85f64-5717-4562-b3fc-2c963f66afa6'
             
     message:
       properties:
